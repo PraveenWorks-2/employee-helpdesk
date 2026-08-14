@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeController {
 
 	private final EmployeeService employeeService;
-	
+
 	@PostMapping
 	public ResponseEntity<EmployeeResponse> createEmployee(
 			@Valid @RequestBody EmployeeRequest request){
