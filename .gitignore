@@ -1,0 +1,65 @@
+# OS / editor files
+.DS_Store
+**/.DS_Store
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+.github
+
+# Build / tool outputs
+**/target/
+**/build/
+**/out/
+**/.gradle/
+**/.classpath
+**/.project
+**/.settings/
+**/.factorypath
+**/.apt_generated/
+**/.sts4-cache/
+**/.springBeans
+**/.metadata/
+
+# Java / Maven / Gradle
+**/bin/
+**/tmp/
+*.class
+*.log
+*.jar
+*.war
+*.ear
+
+# Node / web
+node_modules/
+.npm/
+.pnpm-store/
+
+# Python virtual envs
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Environment and secrets
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# Test / coverage output
+coverage/
+*.lcov
+
+# Project artifacts
+*.zip
+*.tar.gz
+*.tgz
+
+# Local docs / generated files
+*.local
+*.bak
+*.orig
