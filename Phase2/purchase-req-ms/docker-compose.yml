@@ -1,0 +1,187 @@
+services:
+
+  # =====================================================
+  # PostgreSQL
+  # =====================================================
+
+  postgres:
+    image: postgres:16
+    container_name: purchase-postgres
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: postgres
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - purchase-network
+
+
+  # =====================================================
+  # Eureka Service Registry
+  # =====================================================
+
+  service-registry:
+    build:
+      context: ./service-registry
+      dockerfile: Dockerfile
+
+    container_name: service-registry
+
+    ports:
+      - "8761:8761"
+
+    networks:
+      - purchase-network
+
+
+  # =====================================================
+  # Purchase Service
+  # =====================================================
+
+  purchase-service:
+    build:
+      context: ./purchase-service
+      dockerfile: Dockerfile
+
+    container_name: purchase-service
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      service-registry:
+        condition: service_started
+
+    environment:
+      SPRING_APPLICATION_NAME: purchase-service
+
+      SERVER_PORT: 8081
+
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/purchase_db
+
+      SPRING_DATASOURCE_USERNAME: postgres
+
+      SPRING_DATASOURCE_PASSWORD: admin
+
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+
+      JWT_SECRET: PurchaseRequisitionMicroserviceSecretKey2026VerySecure
+
+    ports:
+      - "8081:8081"
+
+    networks:
+      - purchase-network
+
+
+  # =====================================================
+  # Approval Service
+  # =====================================================
+
+  approval-service:
+    build:
+      context: ./approval-service
+      dockerfile: Dockerfile
+
+    container_name: approval-service
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      service-registry:
+        condition: service_started
+
+      purchase-service:
+        condition: service_started
+
+    environment:
+      SPRING_APPLICATION_NAME: approval-service
+
+      SERVER_PORT: 8082
+
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/approval_db
+
+      SPRING_DATASOURCE_USERNAME: postgres
+
+      SPRING_DATASOURCE_PASSWORD: admin
+
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+
+      JWT_SECRET: PurchaseRequisitionMicroserviceSecretKey2026VerySecure
+
+      PURCHASE_SERVICE_URL: http://purchase-service:8081
+
+    ports:
+      - "8082:8082"
+
+    networks:
+      - purchase-network
+
+
+  # =====================================================
+  # API Gateway
+  # =====================================================
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+
+    container_name: api-gateway
+
+    depends_on:
+      service-registry:
+        condition: service_started
+
+      purchase-service:
+        condition: service_started
+
+      approval-service:
+        condition: service_started
+
+    environment:
+      SPRING_APPLICATION_NAME: api-gateway
+
+      SERVER_PORT: 8080
+
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka/
+
+      JWT_SECRET: PurchaseRequisitionMicroserviceSecretKey2026VerySecure
+
+    ports:
+      - "8080:8080"
+
+    networks:
+      - purchase-network
+
+
+# =====================================================
+# Volumes
+# =====================================================
+
+volumes:
+  postgres_data:
+
+
+# =====================================================
+# Network
+# =====================================================
+
+networks:
+  purchase-network:
+    driver: bridge
