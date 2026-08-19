@@ -4,19 +4,25 @@ import com.manoj.notification.template.dto.TemplateRequestDto;
 import com.manoj.notification.template.dto.TemplateResponseDto;
 import com.manoj.notification.template.entity.Template;
 import com.manoj.notification.template.repository.TemplateRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
-@RequiredArgsConstructor
 public class TemplateServiceImpl implements TemplateService {
 
     private final TemplateRepository templateRepository;
 
+    @Autowired
+    public TemplateServiceImpl(TemplateRepository templateRepository) {
+        this.templateRepository = templateRepository;
+    }
+
     @Override
     public TemplateResponseDto createTemplate(TemplateRequestDto requestDto) {
         if (templateRepository.existsByTemplateCode(requestDto.getTemplateCode())) {
-            throw new IllegalArgumentException("Template with code '" + requestDto.getTemplateCode() + "' already exists.");
+            throw new IllegalArgumentException("Template code already exists: " + requestDto.getTemplateCode());
         }
 
         Template template = Template.builder()
@@ -24,6 +30,8 @@ public class TemplateServiceImpl implements TemplateService {
                 .templateName(requestDto.getTemplateName())
                 .content(requestDto.getContent())
                 .notificationType(requestDto.getNotificationType())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         Template savedTemplate = templateRepository.save(template);
@@ -37,15 +45,15 @@ public class TemplateServiceImpl implements TemplateService {
         return mapToResponseDto(template);
     }
 
-    private TemplateResponseDto mapToResponseDto(Template entity) {
+    private TemplateResponseDto mapToResponseDto(Template template) {
         return TemplateResponseDto.builder()
-                .id(entity.getId())
-                .templateCode(entity.getTemplateCode())
-                .templateName(entity.getTemplateName())
-                .content(entity.getContent())
-                .notificationType(entity.getNotificationType())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                .id(template.getId())
+                .templateCode(template.getTemplateCode())
+                .templateName(template.getTemplateName())
+                .content(template.getContent())
+                .notificationType(template.getNotificationType())
+                .createdAt(template.getCreatedAt())
+                .updatedAt(template.getUpdatedAt())
                 .build();
     }
 }

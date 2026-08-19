@@ -22,16 +22,13 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationResponseDto sendNotification(NotificationRequestDto requestDto) {
-        // 1. Fetch template via OpenFeign from template-service
         TemplateClientDto template = templateServiceClient.getTemplateById(requestDto.getTemplateId());
         if (template == null) {
             throw new RuntimeException("Failed to fetch template with ID: " + requestDto.getTemplateId());
         }
 
-        // 2. Resolve template placeholders: {{key}} -> value
         String renderedMessage = renderTemplate(template.getContent(), requestDto.getPlaceholders());
 
-        // 3. Persist notification
         Notification notification = Notification.builder()
                 .userId(requestDto.getUserId())
                 .templateId(template.getId())
@@ -45,7 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<NotificationResponseDto> getNotificationsByUserId(Long userId) {
+    public List<NotificationResponseDto> getUserNotifications(Long userId) {
         return notificationRepository.findByUserIdOrderByCreatedAtDesc(userId)
                 .stream()
                 .map(this::mapToDto)

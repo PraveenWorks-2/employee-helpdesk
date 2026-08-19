@@ -4,27 +4,29 @@ import com.manoj.notification.template.dto.TemplateRequestDto;
 import com.manoj.notification.template.dto.TemplateResponseDto;
 import com.manoj.notification.template.service.TemplateService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/templates")
-@RequiredArgsConstructor
 public class TemplateController {
 
     private final TemplateService templateService;
 
+    @Autowired
+    public TemplateController(TemplateService templateService) {
+        this.templateService = templateService;
+    }
+
     @PostMapping
     public ResponseEntity<TemplateResponseDto> createTemplate(@Valid @RequestBody TemplateRequestDto requestDto) {
-        TemplateResponseDto createdTemplate = templateService.createTemplate(requestDto);
-        return new ResponseEntity<>(createdTemplate, HttpStatus.CREATED);
+        return new ResponseEntity<>(templateService.createTemplate(requestDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TemplateResponseDto> getTemplateById(@PathVariable Long id) {
-        TemplateResponseDto template = templateService.getTemplateById(id);
-        return ResponseEntity.ok(template);
+        return ResponseEntity.ok(templateService.getTemplateById(id));
     }
 }

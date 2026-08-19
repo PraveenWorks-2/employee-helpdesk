@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface NotificationService {
     NotificationResponseDto sendNotification(NotificationRequestDto requestDto);
-    List<NotificationResponseDto> getNotificationsByUserId(Long userId);
+    List<NotificationResponseDto> getUserNotifications(Long userId);
     NotificationResponseDto markAsRead(Long notificationId);
 }
