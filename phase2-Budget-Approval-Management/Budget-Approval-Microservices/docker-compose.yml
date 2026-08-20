@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Root12
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - budget-approval-network
+
+  eureka-server:
+    build: ./eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - budget-approval-network
+
+  budget-service:
+    build: ./budget-service
+    container_name: budget-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/budget_db
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+      - eureka-server
+    networks:
+      - budget-approval-network
+
+  approval-service:
+    build: ./approval-service
+    container_name: approval-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/approval_db
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+      - eureka-server
+    networks:
+      - budget-approval-network
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+      - budget-service
+      - approval-service
+    networks:
+      - budget-approval-network
+
+networks:
+  budget-approval-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

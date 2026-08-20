@@ -1,0 +1,199 @@
+{
+  "info": {
+    "_postman_id": "8b27a533-2a25-4734-bc27-73f3f875641c",
+    "name": "Budget-Approval",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40039792"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "auth", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create a Budget",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"departmentName\": \"Engineering\",\n    \"fiscalYear\": 2026,\n    \"totalAmount\": 500000\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/budgets",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "budgets"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Budget By Id",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/budgets/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "budgets", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Allocation",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"category\": \"Hardware\",\n    \"amount\": 50000\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/budgets/1/allocate",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "budgets", "1", "allocate"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Variance",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/budgets/1/variance",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "budgets", "1", "variance"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Submit For Approval",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/approvals/1/submit",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "approvals", "1", "submit"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Approve Budget",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"remarks\": \"Approved for FY2026\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/approvals/1/approve",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "approvals", "1", "approve"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Reject Budget",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"remarks\": \"Insufficient justification\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/approvals/1/reject",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "approvals", "1", "reject"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Transaction",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"amount\": 25000,\n    \"description\": \"Sample transaction\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/budgets/1/transactions",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "budgets", "1", "transactions"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

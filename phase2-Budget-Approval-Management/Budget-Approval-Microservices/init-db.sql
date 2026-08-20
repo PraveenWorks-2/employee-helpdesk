@@ -1,0 +1,2 @@
+CREATE DATABASE budget_db;
+CREATE DATABASE approval_db;
