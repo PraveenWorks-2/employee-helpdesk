@@ -1,0 +1,64 @@
+services:
+
+  lead-db:
+    image: postgres:16
+    container_name: crm-lead-db
+    environment:
+      POSTGRES_DB: lead_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - lead-db-data:/var/lib/postgresql/data
+
+  opportunity-db:
+    image: postgres:16
+    container_name: crm-opportunity-db
+    environment:
+      POSTGRES_DB: opportunity_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - opportunity-db-data:/var/lib/postgresql/data
+
+  eureka-server:
+    build: ./com.example.eurekaserver
+    container_name: crm-eureka-server
+    ports:
+      - "8761:8761"
+
+  lead-service:
+    build: ./lead-service
+    container_name: crm-lead-service
+    depends_on:
+      - eureka-server
+      - lead-db
+    ports:
+      - "8081:8081"
+
+  opportunity-service:
+    build: ./opportunity-service
+    container_name: crm-opportunity-service
+    depends_on:
+      - eureka-server
+      - opportunity-db
+      - lead-service
+    ports:
+      - "8082:8082"
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: crm-api-gateway
+    depends_on:
+      - eureka-server
+      - lead-service
+      - opportunity-service
+    ports:
+      - "8080:8080"
+
+volumes:
+  lead-db-data:
+  opportunity-db-data:
