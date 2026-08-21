@@ -1,0 +1,10 @@
+D:\warehouse-inventory-transfer-microservices\warehouse-service\src\main\java\com\example\warehouse_service\controller\InventoryController.java
+D:\warehouse-inventory-transfer-microservices\warehouse-service\src\main\java\com\example\warehouse_service\controller\WarehouseController.java
+D:\warehouse-inventory-transfer-microservices\warehouse-service\src\main\java\com\example\warehouse_service\dto\InventoryTransferRequest.java
+D:\warehouse-inventory-transfer-microservices\warehouse-service\src\main\java\com\example\warehouse_service\dto\StockCheckResponse.java
+D:\warehouse-inventory-transfer-microservices\warehouse-service\src\main\java\com\example\warehouse_service\entity\Inventory.java
+D:\warehouse-inventory-transfer-microservices\warehouse-service\src\main\java\com\example\warehouse_service\entity\Warehouse.java
+D:\warehouse-inventory-transfer-microservices\warehouse-service\src\main\java\com\example\warehouse_service\repository\InventoryRepository.java
+D:\warehouse-inventory-transfer-microservices\warehouse-service\src\main\java\com\example\warehouse_service\repository\WarehouseRepository.java
+D:\warehouse-inventory-transfer-microservices\warehouse-service\src\main\java\com\example\warehouse_service\service\InventoryService.java
+D:\warehouse-inventory-transfer-microservices\warehouse-service\src\main\java\com\example\warehouse_service\WarehouseServiceApplication.java

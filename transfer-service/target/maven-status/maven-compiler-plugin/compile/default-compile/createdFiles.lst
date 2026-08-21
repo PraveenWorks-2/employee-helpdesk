@@ -1,0 +1,10 @@
+com\example\transfer_service\entity\TransferStatus.class
+com\example\transfer_service\entity\TransferEntity.class
+com\example\transfer_service\dto\StockCheckResponse.class
+com\example\transfer_service\service\TransferService.class
+com\example\transfer_service\controller\TransferController.class
+com\example\transfer_service\dto\TransferRequest.class
+com\example\transfer_service\repository\TransferRepository.class
+com\example\transfer_service\client\WarehouseClient.class
+com\example\transfer_service\dto\InventoryTransferRequest.class
+com\example\transfer_service\TransferServiceApplication.class

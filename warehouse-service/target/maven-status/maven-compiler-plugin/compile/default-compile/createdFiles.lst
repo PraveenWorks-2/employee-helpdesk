@@ -1,0 +1,10 @@
+com\example\warehouse_service\repository\WarehouseRepository.class
+com\example\warehouse_service\WarehouseServiceApplication.class
+com\example\warehouse_service\controller\WarehouseController.class
+com\example\warehouse_service\entity\Warehouse.class
+com\example\warehouse_service\controller\InventoryController.class
+com\example\warehouse_service\service\InventoryService.class
+com\example\warehouse_service\repository\InventoryRepository.class
+com\example\warehouse_service\dto\InventoryTransferRequest.class
+com\example\warehouse_service\dto\StockCheckResponse.class
+com\example\warehouse_service\entity\Inventory.class
